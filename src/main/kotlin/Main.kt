@@ -38,32 +38,32 @@ fun String.alignCenter(): String {
     println("spaceLeft = ${spaceLeft.length}")
     println("spaceRight = ${spaceRight.length}")
 
-    val final = "$spaceLeft$this$spaceRight"
+    val text = "$spaceLeft$this$spaceRight"
 
-    println("final[before]: ${final.length}")
+    println("final[before]: ${text.length}")
 
-    if (final.length > TAMANHO_PAPEL) {
+    if (text.length > TAMANHO_PAPEL) {
         println("Final > TAMANHO_PAPEL")
-        println("Final ${final.length}")
+        println("Final ${text.length}")
         println("TAMANHO_PAPEL $TAMANHO_PAPEL")
 
-        println("Diff ${( final.length -TAMANHO_PAPEL).roundToInt()}")
+        println("Diff ${( text.length -TAMANHO_PAPEL).roundToInt()}")
 
-       return  when (val diff = (final.length - TAMANHO_PAPEL).roundToInt()) {
-            1 -> final.substring(diff)
+       return  when (val diff = (text.length - TAMANHO_PAPEL).roundToInt()) {
+            1 -> text.substring(diff)
 
             else -> {
                 when {
                     diff > 1 -> {
                         val roundToInt = (diff / 2)
-                        final.substring(roundToInt)
-                        final.substring(0, final.length - roundToInt)
+                        text.substring(roundToInt)
+                        text.substring(0, text.length - roundToInt)
                     }
-                    else -> final
+                    else -> text
                 }
             }
         }
     }
 
-    return final
+    return text
 }
