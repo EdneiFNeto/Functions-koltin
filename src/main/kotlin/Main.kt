@@ -1,37 +1,10 @@
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 const val TAMANHO_PAPEL = 32.0
 
 fun main(args: Array<String>) {
-
-//    println("EMISSÃO.:12/08/2022 17:18 Ednei".alignLeftRight(".:"))
-//    println("JOAO MERCANTE.:".alignLeftRight(".:"))
-//    println("CPF.:999.999.999-99".alignLeftRight(".:"))
-//    println("POS.:9999999999999".alignLeftRight(".:"))
-//
-//    println("Master Card".alignCenter())
-//    println("Qtd.:1000".alignLeftRight(".:"))
-//    println("Credito a vista.:R$999.999,99".alignLeftRight(".:"))
-
-//
-//    println("MasterCard".alignCenter())
-//    println("Crédito a vista.:10000.:R$ 999.999,999".alignLeftCenterRight(".:"))
-//    println("Aprovado.:1.:R$12,00".alignLeftCenterRight(".:"))
-//
-//    println("Débito.:Qtde.:Valor".alignLeftCenterRight(".:"))
-    println("Aprovado.:100000.:R$12,00".alignLeftCenterRight(".:"))
-//    println("Cancelado.:1.:R$-16,00".alignLeftCenterRight(".:"))
-//
-//    println("Visa".alignCenter())
-//    println("Crédito.:1.:R$-2,00".alignLeftCenterRight(".:"))
-//
-//    println("Pix".alignCenter())
-//    println("Aprovado.:1.:R$-2,00".alignLeftCenterRight(".:"))
-//
-//    println("RESUMO DAS OPERACOES".alignCenter())
-//    println("QTDE".alignCenter())
-//    println("APROVADO.:3.:R$999.999,99".alignLeftCenterRight(".:"))
-//    println("CANCELADO.:5.:R$9.999,99".alignLeftCenterRight(".:"))
+    println("randBets() = ${randBets()}")
 }
 
 fun String.alignLeftRight(character: String): String {
@@ -135,4 +108,8 @@ fun String.alignLeftCenterRight(character: String, drawLine: String = "-"): Stri
     }
 
     return this
+}
+
+private fun randBets(): String {
+    return List(2) { Random.nextInt(10, 99) }.toString().replace("\\D".toRegex(), "")
 }
