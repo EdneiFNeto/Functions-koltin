@@ -4,7 +4,13 @@ import kotlin.random.Random
 const val TAMANHO_PAPEL = 32.0
 
 fun main(args: Array<String>) {
-    println("randBets() = ${randBets()}")
+
+    val pass = "123"
+    val addMask = pass.addMask()
+    println("mask = $addMask")
+
+    val restore = addMask.restore(pass)
+    println("restore = $restore")
 }
 
 fun String.alignLeftRight(character: String): String {
@@ -112,4 +118,13 @@ fun String.alignLeftCenterRight(character: String, drawLine: String = "-"): Stri
 
 private fun randBets(): String {
     return List(2) { Random.nextInt(10, 99) }.toString().replace("\\D".toRegex(), "")
+}
+
+private fun String.addMask(): String {
+    return this.replace("\\d".toRegex(), "*")
+}
+
+private fun String.restore(digit: String): String {
+    println("digit.length = ${digit.length}")
+    return this.replace("[*]".toRegex(), digit).substring(0, digit.length)
 }
