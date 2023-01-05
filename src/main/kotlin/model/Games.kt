@@ -12,9 +12,14 @@ class Centena(private val modality: Modality) : ModalityFactory(modality) {
     override fun randBets(): String {
         val size = modality.sizeMin / 2
         val numRand = (modality.numMin..modality.numMax).random().toString()
-        val rand = if(numRand.length > 1) { numRand.removeLastCharacter() } else { numRand }
+        val rand = if (numRand.length > 1) {
+            numRand.removeLastCharacter()
+        } else {
+            numRand
+        }
 
-        val list = List(size) { Random.nextInt(modality.numMin, modality.numMax)
+        val list = List(size) {
+            Random.nextInt(modality.numMin, modality.numMax)
         }.map {
             if (it < 10) "0$it"
             else it.toString()
@@ -24,6 +29,8 @@ class Centena(private val modality: Modality) : ModalityFactory(modality) {
     }
 }
 
+class Dezena(modality: Modality) : ModalityFactory(modality)
+
 class Unidade(private val modality: Modality) : ModalityFactory(modality) {
     override fun randBets(): String {
         val numRand = (modality.numMin..modality.numMax).random().toString()
@@ -31,12 +38,15 @@ class Unidade(private val modality: Modality) : ModalityFactory(modality) {
     }
 }
 
+class Grupo(modality: Modality) : ModalityFactory(modality)
+
+class DuqueDeDezena(modality: Modality) : ModalityFactory(modality)
+
 data class Modality(
     val sizeMin: Int = 4,
     val maxSize: Int = 4,
     val numMin: Int = 0,
-    val numMax: Int = 99,
-    val typeGame: TypeGame
+    val numMax: Int = 99
 )
 
 abstract class ModalityFactory(private val modality: Modality) {
