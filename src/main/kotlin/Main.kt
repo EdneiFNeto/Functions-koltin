@@ -1,16 +1,24 @@
+import model.Centena
+import model.Milhar
+import model.Modality
+import model.Unidade
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 const val TAMANHO_PAPEL = 32.0
 
 fun main(args: Array<String>) {
+    val milhar = Milhar(modality = Modality(typeGame = TypeGame.MILHAR))
+    println("Milhar[Bets] = ${milhar.addBets(StringBuilder("123"))}")
+    println("Milhar[randBets]: ${milhar.randBets()}")
 
-    val pass = "123"
-    val addMask = pass.addMask()
-    println("mask = $addMask")
+    val centena = Centena(modality = Modality(typeGame = TypeGame.CENTENA, sizeMin = 3))
+    println("Centena[Bets] = ${centena.addBets(StringBuilder("123"))}")
+    println("Centena[randBets]: ${centena.randBets()}")
 
-    val restore = addMask.restore(pass)
-    println("restore = $restore")
+    val unidade = Unidade(modality = Modality(typeGame = TypeGame.CENTENA, sizeMin = 1))
+    println("unidade[Bets] = ${unidade.addBets(StringBuilder("1"))}")
+    println("unidade[randBets]: ${unidade.randBets()}")
 }
 
 fun String.alignLeftRight(character: String): String {
@@ -116,8 +124,16 @@ fun String.alignLeftCenterRight(character: String, drawLine: String = "-"): Stri
     return this
 }
 
-private fun randBets(): String {
-    return List(2) { Random.nextInt(10, 99) }.toString().replace("\\D".toRegex(), "")
+private fun TypeGame.randBets(numMin: Int, numMax: Int): String {
+
+    val size = when (this) {
+        TypeGame.MILHAR -> 2
+        TypeGame.CENTENA -> 1
+        else -> 1
+    }
+
+    return List(size) { Random.nextInt(numMin, numMax) }
+        .toString().replace("\\D".toRegex(), "")
 }
 
 private fun String.addMask(): String {
@@ -128,3 +144,6 @@ private fun String.restore(digit: String): String {
     println("digit.length = ${digit.length}")
     return this.replace("[*]".toRegex(), digit).substring(0, digit.length)
 }
+
+
+
