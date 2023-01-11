@@ -1,24 +1,47 @@
-import model.Centena
-import model.Milhar
-import model.Modality
-import model.Unidade
+import model.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.roundToInt
 import kotlin.random.Random
+
 
 const val TAMANHO_PAPEL = 32.0
 
 fun main(args: Array<String>) {
-    val milhar = Milhar(modality = Modality(typeGame = TypeGame.MILHAR))
-    println("Milhar[Bets] = ${milhar.addBets(StringBuilder("123"))}")
-    println("Milhar[randBets]: ${milhar.randBets()}")
 
-    val centena = Centena(modality = Modality(typeGame = TypeGame.CENTENA, sizeMin = 3))
-    println("Centena[Bets] = ${centena.addBets(StringBuilder("123"))}")
-    println("Centena[randBets]: ${centena.randBets()}")
+    val formatDate = formatDate()
+    println("formatDate = $formatDate")
+    println("formatDate = ${getAno()}")
 
-    val unidade = Unidade(modality = Modality(typeGame = TypeGame.CENTENA, sizeMin = 1))
-    println("unidade[Bets] = ${unidade.addBets(StringBuilder("1"))}")
-    println("unidade[randBets]: ${unidade.randBets()}")
+//    val milhar = Milhar(modality = Modality())
+//    println("Milhar[Bets] = ${milhar.addBets(StringBuilder("123"))}")
+//    println("Milhar[randBets]: ${milhar.randBets()}")
+//
+//    println("")
+//    val centena = Centena(modality = Modality(sizeMin = 3))
+//    println("Centena[Bets] = ${centena.addBets(StringBuilder("123"))}")
+//    println("Centena[randBets]: ${centena.randBets()}")
+//
+//    println("")
+//    val unidade = Unidade(modality = Modality(sizeMin = 1))
+//    println("unidade[Bets] = ${unidade.addBets(StringBuilder("1"))}")
+//    println("unidade[randBets]: ${unidade.randBets()}")
+//
+//    println("")
+//    val dezena = Dezena(modality = Modality(sizeMin = 2))
+//    println("dezena[Bets] = ${dezena.addBets(StringBuilder("22"))}")
+//    println("dezena[randBets]: ${dezena.randBets()}")
+//
+//    println("")
+//    val grupo = Grupo(modality = Modality(sizeMin = 2))
+//    println("grupo[Bets] = ${grupo.addBets(StringBuilder("12"))}")
+//    println("grupo[randBets]: ${grupo.randBets()}")
+//
+//    println("")
+//    val duqueDeDezena = DuqueDeDezena(modality = Modality())
+//    println("duqueDeDezena[Bets] = ${duqueDeDezena.addBets(StringBuilder("1245"))}")
+//    println("duqueDeDezena[randBets]: ${duqueDeDezena.randBets()}")
 }
 
 fun String.alignLeftRight(character: String): String {
@@ -143,6 +166,24 @@ private fun String.addMask(): String {
 private fun String.restore(digit: String): String {
     println("digit.length = ${digit.length}")
     return this.replace("[*]".toRegex(), digit).substring(0, digit.length)
+}
+
+fun formatDate(): String {
+    val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+    val date = formatarData("2022-03-12T00:00:00", "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss")
+    return ""
+}
+
+fun formatarData(data: String?, entrada: String, retorno: String): String {
+    val formatUS: DateFormat = SimpleDateFormat(entrada)
+    val date: Date = formatUS.parse(data)
+    val formatBR: DateFormat = SimpleDateFormat(retorno)
+    return formatBR.format(date)
+}
+
+fun getAno(): String {
+    val calendar = Calendar.getInstance()
+    return calendar.get(Calendar.YEAR).toString()
 }
 
 
