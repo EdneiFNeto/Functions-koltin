@@ -9,12 +9,12 @@ import kotlin.random.Random
 const val TAMANHO_PAPEL = 32.0
 
 fun main(args: Array<String>) {
+    val alignLeftAndRight = "Data Impr.:18/01/2023 20:29".alignLeftAndRight(".:", " ", true)
+    println("alignLeftAndRight = $alignLeftAndRight")
+}
 
-    val formatDate = formatDate()
-    println("formatDate = $formatDate")
-    println("formatDate = ${getAno()}")
-
-//    val milhar = Milhar(modality = Modality())
+private fun printBets() {
+    //    val milhar = Milhar(modality = Modality())
 //    println("Milhar[Bets] = ${milhar.addBets(StringBuilder("123"))}")
 //    println("Milhar[randBets]: ${milhar.randBets()}")
 //
@@ -186,5 +186,25 @@ fun getAno(): String {
     return calendar.get(Calendar.YEAR).toString()
 }
 
+
+fun String.alignLeftAndRight(character: String, drawLine: String, isShowCharacter: Boolean = false): String {
+
+    if (this.contains(character)) {
+        val cutStr = this.split(character)
+        val text1 = if (!isShowCharacter) cutStr[0] else "${cutStr[0]}${character}"
+        val text2 = cutStr[cutStr.size - 1]
+
+        val diff = TAMANHO_PAPEL - (text1.length + text2.length)
+        val lineLeft = StringBuilder()
+
+        for (i in 0 until diff.toInt()) {
+            lineLeft.append(drawLine)
+        }
+
+        return "$text1${lineLeft}$text2"
+    }
+
+    return this
+}
 
 

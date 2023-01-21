@@ -1,6 +1,5 @@
 package model
 
-import TypeGame
 import extensions.convertFromNumber
 import extensions.removeCharacterArray
 import extensions.removeLastCharacter
