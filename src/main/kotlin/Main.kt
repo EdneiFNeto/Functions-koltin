@@ -1,5 +1,5 @@
-import model.*
 import java.text.DateFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -9,8 +9,88 @@ import kotlin.random.Random
 const val TAMANHO_PAPEL = 32.0
 
 fun main(args: Array<String>) {
-    val alignLeftAndRight = "Data Impr.:18/01/2023 20:29".alignLeftAndRight(".:", " ", true)
-    println("alignLeftAndRight = $alignLeftAndRight")
+
+    val str = "STATUS:PREMIO NAO CONFIRMADO123456789".alignLeftAndRight(":", false)
+    println("currentDate = $str")
+    println("currentDate = ${str.length}")
+
+}
+
+fun drawLine(): String {
+    val str = StringBuilder()
+    for (i in 1..TAMANHO_PAPEL.toInt()) str.append("-")
+    return str.toString()
+}
+
+fun String.alignLeftCenterRight(character: String, drawLine: String = "-"): String {
+    if (this.contains(character)) {
+        val strLines = this.split(character)
+
+        if (strLines.isNotEmpty() && strLines.size == 3) {
+            val leftText = strLines[0]
+            val centerText = strLines[1]
+            val rightText = strLines[strLines.size - 1]
+
+            val spaceLeft = StringBuilder()
+            val spaceRight = StringBuilder()
+
+            val diffCenterTextWithPaper = TAMANHO_PAPEL - centerText.length
+
+            val roundToInt = (diffCenterTextWithPaper / 2).roundToInt()
+
+            for (i in 0 until roundToInt) {
+                spaceLeft.append(drawLine)
+                spaceRight.append(drawLine)
+            }
+
+            val sizeTexts = "$spaceLeft$centerText$spaceRight".length
+
+            return if (sizeTexts > TAMANHO_PAPEL) {
+                val diff = sizeTexts - TAMANHO_PAPEL
+                val textLeft = spaceLeft.toString().addTextLeft(leftText)
+                val finalText = spaceRight.toString().addTextRight(rightText)
+                "$textLeft$centerText${finalText.removeFirstCharacter(diff.roundToInt())}"
+            } else {
+                val textLeft = spaceLeft.toString().addTextLeft(leftText)
+                val finalText = spaceRight.toString().addTextRight(rightText)
+                "$textLeft$centerText${finalText}"
+            }
+        }
+    }
+
+    return this
+}
+
+private fun String.addTextLeft(text: String): String {
+    return if (text.length < this.length)
+        text + this.substring(text.length)
+    else text.substring(0, this.length - 1) + " "
+}
+
+private fun String.addTextRight(text: String): String {
+    return if (text.length < this.length) this.removeLastCharacter(text.length) + text
+    else " " + text.substring(0, this.length - 1)
+}
+
+fun String.removeLastCharacter(index: Int) = this.substring(0, this.length - index)
+
+fun String.removeFirstCharacter(index: Int) = this.substring(index)
+
+fun String.formatAmount(): String {
+    val numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+    val number = this.toDouble()
+    return numberFormat.format(number.div(100))
+}
+
+fun Long.formatAmount(): String {
+    val numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+    return numberFormat.format(this.div(100))
+}
+
+fun Double.formatAmount(): String {
+    return NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+        .format(this)
+        .replace("\\s+".toRegex(), "")
 }
 
 private fun printBets() {
@@ -44,10 +124,10 @@ private fun printBets() {
 //    println("duqueDeDezena[randBets]: ${duqueDeDezena.randBets()}")
 }
 
-fun String.alignLeftRight(character: String): String {
+fun String.alignLeftAndRight(character: String, isShowCharacter: Boolean = false): String {
 
     if (this.contains(character)) {
-        val spaceLeft = StringBuilder()
+        val spaceRight = StringBuilder()
         val split = this.split(character)
         if (split.isNotEmpty()) {
             val title1 = split[0]
@@ -55,20 +135,32 @@ fun String.alignLeftRight(character: String): String {
 
             val space = TAMANHO_PAPEL - title1.length
 
-            for (i in 0 until space.toInt()) spaceLeft.append("-")
-
-            val diff = spaceLeft.length - finalSplit.length
-            val title2 = when {
-                diff > 0 -> spaceLeft.substring(0, diff) + finalSplit
-                else -> "\n" + finalSplit
+            for (i in 0 until space.toInt()) {
+                spaceRight.append("-")
             }
 
-            return "$title1$title2"
+
+            val diff = spaceRight.length - finalSplit.length
+            println("diff = $diff")
+            val title2 = when (diff > 0) {
+                true -> spaceRight.substring(0, diff) + finalSplit
+                else -> finalSplit.substring(0, spaceRight.length)
+            }
+
+            val newTitle2 = if(isShowCharacter) title2.substring(1)
+            else title2
+
+            val result = "$title1${if (isShowCharacter) character else ""}$newTitle2"
+
+            val calc = result.length - TAMANHO_PAPEL
+            println("calc = $calc")
+            return result
         }
     }
 
     return this
 }
+
 
 fun String.alignCenter(): String {
 
@@ -104,49 +196,6 @@ fun String.alignCenter(): String {
     return text
 }
 
-fun String.alignLeftCenterRight(character: String, drawLine: String = "-"): String {
-    if (this.contains(character)) {
-        val strLines = this.split(character)
-
-        if (strLines.isNotEmpty() && strLines.size == 3) {
-            val text1 = strLines[0]
-            val text2 = strLines[1]
-            val text3 = strLines[strLines.size - 1]
-
-            val spaceLeft = StringBuilder()
-            val spaceRight = StringBuilder()
-
-            val diffText2WhitPaper = TAMANHO_PAPEL - text2.length
-
-            for (i in 0 until (diffText2WhitPaper / 2).roundToInt()) {
-                spaceLeft.append(drawLine)
-                spaceRight.append(drawLine)
-            }
-
-            val strText1 = if (text1.length > spaceLeft.length) text1.substring(0, spaceLeft.length - 1) + " "
-            else text1 + spaceLeft.substring(text1.length)
-
-            spaceLeft.clear()
-            spaceLeft.append(strText1)
-
-            val diffSpaceWhitText3 = spaceRight.length - text3.length
-            val substring = if (spaceRight.length > text3.length) spaceRight.substring(0, diffSpaceWhitText3) + text3
-            else " " + text3.substring(0, spaceRight.length - 1)
-
-            val result = if (text2.length > TAMANHO_PAPEL) "$text2\n$text1 $text3"
-            else "$spaceLeft$text2$substring"
-
-            println("spaceLeft = ${spaceLeft.length}")
-            println("text2 = $text2")
-            println("substring = ${substring.length}")
-            println("result = ${result.length}")
-            return result
-        }
-    }
-
-    return this
-}
-
 private fun TypeGame.randBets(numMin: Int, numMax: Int): String {
 
     val size = when (this) {
@@ -172,6 +221,18 @@ fun formatDate(): String {
     val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
     val date = formatarData("2022-03-12T00:00:00", "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss")
     return ""
+}
+
+fun currentTime(): String {
+    val calendar = Calendar.getInstance()
+    calendar.get(Calendar.YEAR)
+    calendar.get(Calendar.MONTH)
+    calendar.get(Calendar.DAY_OF_MONTH)
+    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+    calendar.get(Calendar.MINUTE)
+    calendar.get(Calendar.SECOND)
+
+    return (hour - 1).toString()
 }
 
 fun formatarData(data: String?, entrada: String, retorno: String): String {
